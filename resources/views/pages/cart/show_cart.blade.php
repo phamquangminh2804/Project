@@ -101,7 +101,7 @@
 										<li><a href="{{URL::to('/login-checkout')}}"><i class="fa fa-crosshairs"></i> Thanh toán</a></li>
 									<?php } ?>
 
-								<li><a href="{{URL::to('/show-cart')}}"><i class="fa fa-shopping-cart"></i> Giỏ hàng</a></li>
+								<li><a href="{{URL::to('/gio-hang')}}"><i class="fa fa-shopping-cart"></i> Giỏ hàng</a></li>
 								
 								<?php  
 									$customer_id = Session::get('customer_id');
@@ -142,7 +142,7 @@
 								<li class="dropdown"><a href="#">Tin tức<i class="fa fa-angle-down"></i></a>
                                     
                                 </li> 
-								<li><a href="{{URL::to('/show-cart')}}">Giỏ hàng</a></li>
+								<li><a href="{{URL::to('/gio-hang')}}">Giỏ hàng</a></li>
 								<li><a href="contact-us.html">Liên hệ</a></li>
 							</ul>
 						</div>

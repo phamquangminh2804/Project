@@ -7,9 +7,14 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Redirect;
 use Gloudemans\Shoppingcart\Facades\Cart;
+use App\Models\City;
+use App\Models\District;
+use App\Models\Wards;
+use App\Models\Feeship;
 
 class CheckoutController extends Controller
 {
+   
     public function AuthLogin(){
         $admin_id = Session::get('admin_id');
         if($admin_id){
@@ -74,13 +79,16 @@ class CheckoutController extends Controller
             ->orderBy('brand_id','desc')
             ->get();
 
+        $city = City::orderby('matp','ASC')->get();
+
         return view('pages.checkout.show_checkout')
             ->with('category',$category_product)
             ->with('brand',$brand_product)
             ->with('meta_desc',$meta_desc)
             ->with('meta_keywords',$meta_keywords)
             ->with('meta_title',$meta_title)
-            ->with('url_canonical',$url_canonical);
+            ->with('url_canonical',$url_canonical)
+            ->with('city',$city);
     }
     public function save_checkout_customer(Request $request){
         $data = array();
@@ -89,7 +97,7 @@ class CheckoutController extends Controller
         $data['shipping_phone'] = $request ->shipping_phone;
         $data['shipping_note'] = $request ->shipping_note;
         $data['shipping_address'] = $request ->shipping_note;
-
+        
         $shipping_id = DB::table('tbl_shipping')
             ->insertGetId($data);
 
@@ -237,5 +245,43 @@ class CheckoutController extends Controller
 
         return view('admin_layout')
             ->with('admin.order.view_order',$manager_order_by_id);
+    }
+
+    public function select_delivery_home(Request $request)
+        {
+            $data = $request->all();
+            if ($data['action']) {
+                $output = '';
+                if ($data['action'] == "city") {
+                    $select_district = District::where('matp', $data['ma_id'])->orderBy('maqh', 'ASC')->get();
+                    $output .= '<option>-----Chọn quận huyện-----</option>';
+                    foreach ($select_district as $key => $district) {
+                        $output .= '<option value="' . $district->maqh . '">' . $district->name_district . '</option>';
+                    }
+                } else {
+                    $select_wards = Wards::where('maqh', $data['ma_id'])->orderBy('xaid', 'ASC')->get();
+                    $output .= '<option>-----Chọn Xã, Phường, Thị trấn-----</option>';
+                    foreach ($select_wards as $key => $ward) {
+                        $output .= '<option value="' . $ward->xaid . '">' . $ward->name_wards. '</option>';
+                    }
+                }
+                // Trả về kết quả
+                return $output;
+            }
+        }
+    public function calculate_fee(Request $request){
+        $data = $request->all();
+        if($data['matp']){
+            $feeship = Feeship::where('fee_matp',$data['matp'])->where('fee_maqh',$data['maqh'])->where('fee_xaid',$data['xaid'])->get();
+            foreach($feeship as $key => $fee){
+                Session::put('fee',$fee->fee_feeship);
+                Session::save();
+            }
+        }
+    }
+
+    public function delete_fee(){
+        Session::forget('fee');
+        
     }
 }

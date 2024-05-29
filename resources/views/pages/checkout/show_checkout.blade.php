@@ -5,7 +5,7 @@
     <div class="container">
         <div class="breadcrumbs">
             <ol class="breadcrumb">
-              <li><a href="{{URL::to('/show-cart')}}">Trang chủ</a></li>
+              <li><a href="{{URL::to('/gio-hang')}}">Trang chủ</a></li>
               <li class="active">Thanh toán giỏ hàng</li>
             </ol>
         </div><!--/breadcrums-->

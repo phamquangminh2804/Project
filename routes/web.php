@@ -8,6 +8,8 @@ use App\Http\Controllers\BrandProduct;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\CartController;
 use App\Http\Controllers\CheckoutController;
+use App\Http\Controllers\CouponController;
+use App\Http\Controllers\DeliveryController;
 use Laravel\Socialite\Facades\Socialite;
 use Illuminate\Support\Facades\Session;
 //front end
@@ -83,6 +85,11 @@ Route::post('/save-cart', [CartController::class, 'save_cart'])->name('save-cart
 Route::post('/update-cart-qty', [CartController::class, 'update_cart_qty'])->name('update-cart-qty');
 Route::get('/show-cart', [CartController::class, 'show_cart'])->name('show-cart');
 Route::get('/delete-to-cart/{rowId}', [CartController::class, 'delete_to_cart'])->name('delete-to-cart');
+Route::get('/del-product/{session_id}', [CartController::class, 'delete_product']);
+Route::get('/del-all-product', [CartController::class, 'delete_all_product']);
+Route::post('/add-cart-ajax', [CartController::class, 'add_cart_ajax']);
+Route::get('/gio-hang', [CartController::class, 'gio_hang']);
+Route::post('/update-cart', [CartController::class, 'update_cart']);
 
 //checkout
 Route::get('/login-checkout', [CheckoutController::class, 'login_checkout'])->name('login-checkout');
@@ -99,3 +106,19 @@ Route::post('/order-place', [CheckoutController::class, 'order_place'])->name('o
 //order
 Route::get('/manage-order', [CheckoutController::class, 'manage_order'])->name('manage-order');
 Route::get('/view-order/{orderId}', [CheckoutController::class, 'view_order'])->name('view-order');
+
+//Coupon
+
+Route::post('/check-coupon', [CartController::class, 'check_coupon']);
+Route::get('/unset-coupon', [CouponController::class, 'unset_coupon']);
+Route::get('/insert-coupon', [CouponController::class, 'insert_coupon']);
+Route::get('/delete-coupon/{coupon_id}', [CouponController::class, 'delete_coupon']);
+Route::get('/list-coupon', [CouponController::class, 'list_coupon']);
+Route::post('/insert-coupon-code', [CouponController::class, 'insert_coupon_code']);
+
+//delivery
+Route::get('/delivery', [DeliveryController::class, 'delivery']);
+Route::post('/select-delivery', [DeliveryController::class, 'select_delivery']);
+Route::post('/insert-delivery', [DeliveryController::class, 'insert_delivery']);
+Route::post('/select-feeship', [DeliveryController::class, 'select_feeship']);
+Route::post('/update-delivery', [DeliveryController::class, 'update_delivery']);

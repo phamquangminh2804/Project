@@ -114,7 +114,28 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 						<li><a href="{{URL::to('/manage-order')}}">Quản lý đơn hàng</a></li>
                     </ul>
                 </li> 
-                
+                <li class="sub-menu">
+                    <a href="javascript:;">
+                        <i class="fa fa-book"></i>
+                        <span>Mã giảm giá</span>
+                    </a>
+                    <ul class="sub">
+                        <li><a href="{{URL::to('/insert-coupon')}}">Quản lý mã giảm giá</a></li>
+                        <li><a href="{{URL::to('/list-coupon')}}">Liệt kê mã giảm giá</a></li>
+                    </ul>
+                </li>
+                 <li class="sub-menu">
+                    <a href="javascript:;">
+                        <i class="fa fa-book"></i>
+                        <span>Vận chuyển</span>
+                    </a>
+                    <ul class="sub">
+                        <li><a href="{{URL::to('/delivery')}}">Quản lý vận chuyển</a></li>
+                        
+                        
+                      
+                    </ul>
+                </li>
                 <li class="sub-menu">
                     <a href="javascript:;">
                         <i class="fa fa-book"></i>
@@ -435,5 +456,163 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 		});
 	</script>
 	<!-- //calendar -->
+
+    <script type="text/javascript">
+        $(document).ready(function(){
+    
+            fetch_delivery();
+    
+            function fetch_delivery(){
+                var _token = $('input[name="_token"]').val();
+                 $.ajax({
+                    url : '{{url('/select-feeship')}}',
+                    method: 'POST',
+                    data:{_token:_token},
+                    success:function(data){
+                       $('#load_delivery').html(data);
+                    }
+                });
+            }
+            $(document).on('blur','.fee_feeship_edit',function(){
+    
+                var feeship_id = $(this).data('feeship_id');
+                var fee_value = $(this).text();
+                 var _token = $('input[name="_token"]').val();
+                // alert(feeship_id);
+                // alert(fee_value);
+                $.ajax({
+                    url : '{{url('/update-delivery')}}',
+                    method: 'POST',
+                    data:{feeship_id:feeship_id, fee_value:fee_value, _token:_token},
+                    success:function(data){
+                       fetch_delivery();
+                    }
+                });
+    
+            });
+            $('.add_delivery').click(function(){
+    
+               var city = $('.city').val();
+               var district = $('.district').val();
+               var wards = $('.wards').val();
+               var fee_ship = $('.fee_ship').val();
+                var _token = $('input[name="_token"]').val();
+               // alert(city);
+               // alert(district);
+               // alert(wards);
+               // alert(fee_ship);
+                $.ajax({
+                    url : '{{url('/insert-delivery')}}',
+                    method: 'POST',
+                    data:{city:city, district:district, _token:_token, wards:wards, fee_ship:fee_ship},
+                    success:function(data){
+                       fetch_delivery();
+                    }
+                });
+    
+    
+            });
+            $('.choose').on('change',function(){
+                var action = $(this).attr('id');
+                var ma_id = $(this).val();
+                var _token = $('input[name="_token"]').val();
+                var result = '';
+                // alert(action);
+                //  alert(matp);
+                //   alert(_token);
+    
+                if(action=='city'){
+                    result = 'district';
+                }else{
+                    result = 'wards';
+                }
+                $.ajax({
+                    url : '{{url('/select-delivery')}}',
+                    method: 'POST',
+                    data:{action:action,ma_id:ma_id,_token:_token},
+                    success:function(data){
+                       $('#'+result).html(data);     
+                    }
+                });
+            }); 
+        })
+    </script>
+    <script type="text/javascript">
+        $('.order_details').change(function(){
+            var order_status = $(this).val();
+            var order_id = $(this).children(":selected").attr("id");
+            var _token = $('input[name="_token"]').val();
+    
+            //lay ra so luong
+            quantity = [];
+            $("input[name='product_sales_quantity']").each(function(){
+                quantity.push($(this).val());
+            });
+            //lay ra product id
+            order_product_id = [];
+            $("input[name='order_product_id']").each(function(){
+                order_product_id.push($(this).val());
+            });
+            j = 0;
+            for(i=0;i<order_product_id.length;i++){
+                //so luong khach dat
+                var order_qty = $('.order_qty_' + order_product_id[i]).val();
+                //so luong ton kho
+                var order_qty_storage = $('.order_qty_storage_' + order_product_id[i]).val();
+    
+                if(parseInt(order_qty)>parseInt(order_qty_storage)){
+                    j = j + 1;
+                    if(j==1){
+                        alert('Số lượng bán trong kho không đủ');
+                    }
+                    $('.color_qty_'+order_product_id[i]).css('background','#000');
+                }
+            }
+            if(j==0){
+              
+                    $.ajax({
+                            url : '{{url('/update-order-qty')}}',
+                                method: 'POST',
+                                data:{_token:_token, order_status:order_status ,order_id:order_id ,quantity:quantity, order_product_id:order_product_id},
+                                success:function(data){
+                                    alert('Thay đổi tình trạng đơn hàng thành công');
+                                    location.reload();
+                                }
+                    });
+                
+            }
+    
+        });
+    </script>
+    <script type="text/javascript">
+        $('.update_quantity_order').click(function(){
+            var order_product_id = $(this).data('product_id');
+            var order_qty = $('.order_qty_'+order_product_id).val();
+            var order_code = $('.order_code').val();
+            var _token = $('input[name="_token"]').val();
+            // alert(order_product_id);
+            // alert(order_qty);
+            // alert(order_code);
+            $.ajax({
+                    url : '{{url('/update-qty')}}',
+    
+                    method: 'POST',
+    
+                    data:{_token:_token, order_product_id:order_product_id ,order_qty:order_qty ,order_code:order_code},
+                    // dataType:"JSON",
+                    success:function(data){
+    
+                        alert('Cập nhật số lượng thành công');
+                     
+                       location.reload();
+                        
+                  
+                        
+    
+                    }
+            });
+    
+        });
+    </script>
 </body>
 </html>
