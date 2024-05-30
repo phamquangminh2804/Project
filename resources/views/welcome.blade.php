@@ -118,7 +118,7 @@
 										<li><a href="{{URL::to('/login-checkout')}}"><i class="fa fa-crosshairs"></i> Thanh toán</a></li>
 									<?php } ?>
 
-								<li><a href="{{URL::to('/gio hang')}}"><i class="fa fa-shopping-cart"></i> Giỏ hàng</a></li>
+								<li><a href="{{URL::to('/gio-hang')}}"><i class="fa fa-shopping-cart"></i> Giỏ hàng</a></li>
 								
 								<?php  
 									$customer_id = Session::get('customer_id');
@@ -290,7 +290,6 @@
 				
 				<div class="col-sm-9 padding-right">
 					@yield('content')			
-					
 				</div>
 			</div>
 		</div>
@@ -520,71 +519,65 @@
   <script type="text/javascript">
 	  $(document).ready(function(){
 		  $('.add-to-cart').click(function(){
+			var id = $(this).data('id_product');
+			// alert(id);
+			var cart_product_id = $('.cart_product_id_' + id).val();
+			var cart_product_name = $('.cart_product_name_' + id).val();
+			var cart_product_image = $('.cart_product_image_' + id).val();
+			var cart_product_quantity = $('.cart_product_quantity_' + id).val();
+			var cart_product_price = $('.cart_product_price_' + id).val();
+			var cart_product_qty = $('.cart_product_qty_' + id).val();
+			var _token = $('input[name="_token"]').val();
+			if(parseInt(cart_product_qty)>parseInt(cart_product_quantity)){
+				alert('Làm ơn đặt nhỏ hơn ' + cart_product_quantity);
+			}else{
+				$.ajax({
+					url: '{{url('/add-cart-ajax')}}',
+					method: 'POST',
+					data:{cart_product_id:cart_product_id,cart_product_name:cart_product_name,cart_product_image:cart_product_image,cart_product_price:cart_product_price,cart_product_qty:cart_product_qty,_token:_token,cart_product_quantity:cart_product_quantity},
+					success:function(){
+						swal({
+							title: "Đã thêm sản phẩm vào giỏ hàng",
+							text: "Bạn có thể mua hàng tiếp hoặc tới giỏ hàng để tiến hành thanh toán",
+							showCancelButton: true,
+							cancelButtonText: "Xem tiếp",
+							confirmButtonClass: "btn-success",
+							confirmButtonText: "Đi đến giỏ hàng",
+							closeOnConfirm: false
+							},
+							function() {
+								window.location.href = "{{url('/gio-hang')}}";
+							});
+						}
 
-			  var id = $(this).data('id_product');
-			  // alert(id);
-			  var cart_product_id = $('.cart_product_id_' + id).val();
-			  var cart_product_name = $('.cart_product_name_' + id).val();
-			  var cart_product_image = $('.cart_product_image_' + id).val();
-			  var cart_product_quantity = $('.cart_product_quantity_' + id).val();
-			  var cart_product_price = $('.cart_product_price_' + id).val();
-			  var cart_product_qty = $('.cart_product_qty_' + id).val();
-			  var _token = $('input[name="_token"]').val();
-			  if(parseInt(cart_product_qty)>parseInt(cart_product_quantity)){
-				  alert('Làm ơn đặt nhỏ hơn ' + cart_product_quantity);
-			  }else{
-
-				  $.ajax({
-					  url: '{{url('/add-cart-ajax')}}',
-					  method: 'POST',
-					  data:{cart_product_id:cart_product_id,cart_product_name:cart_product_name,cart_product_image:cart_product_image,cart_product_price:cart_product_price,cart_product_qty:cart_product_qty,_token:_token,cart_product_quantity:cart_product_quantity},
-					  success:function(){
-
-						  swal({
-								  title: "Đã thêm sản phẩm vào giỏ hàng",
-								  text: "Bạn có thể mua hàng tiếp hoặc tới giỏ hàng để tiến hành thanh toán",
-								  showCancelButton: true,
-								  cancelButtonText: "Xem tiếp",
-								  confirmButtonClass: "btn-success",
-								  confirmButtonText: "Đi đến giỏ hàng",
-								  closeOnConfirm: false
-							  },
-							  function() {
-								  window.location.href = "{{url('/gio-hang')}}";
-							  });
-
-					  }
-
-				  });
-			  }
-
-			  
-		  });
-	  });
+					});
+				}
+			});
+		});
   </script>
   <script type="text/javascript">
-	  $(document).ready(function(){
-		  $('.choose').on('change',function(){
-		  var action = $(this).attr('id');
-		  var ma_id = $(this).val();
-		  var _token = $('input[name="_token"]').val();
-		  var result = '';
-		 
-		  if(action=='city'){
-			  result = 'district';
-		  }else{
-			  result = 'wards';
-		  }
-		  $.ajax({
-			  url : '{{url('/select-delivery-home')}}',
-			  method: 'POST',
-			  data:{action:action,ma_id:ma_id,_token:_token},
-			  success:function(data){
-				 $('#'+result).html(data);     
-			  }
-		  });
-	  });
-	  });
+		$(document).ready(function(){
+			$('.choose').on('change',function(){
+			var action = $(this).attr('id');
+			var ma_id = $(this).val();
+			var _token = $('input[name="_token"]').val();
+			var result = '';
+			
+			if(action=='city'){
+				result = 'district';
+			}else{
+				result = 'wards';
+			}
+			$.ajax({
+				url : '{{url('/select-delivery-home')}}',
+				method: 'POST',
+				data:{action:action,ma_id:ma_id,_token:_token},
+				success:function(data){
+					$('#'+result).html(data);     
+				}
+			});
+		});
+	});
 		
   </script>
   <script type="text/javascript">

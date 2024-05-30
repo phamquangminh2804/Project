@@ -569,19 +569,16 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
                 }
             }
             if(j==0){
-              
-                    $.ajax({
-                            url : '{{url('/update-order-qty')}}',
-                                method: 'POST',
-                                data:{_token:_token, order_status:order_status ,order_id:order_id ,quantity:quantity, order_product_id:order_product_id},
-                                success:function(data){
-                                    alert('Thay đổi tình trạng đơn hàng thành công');
-                                    location.reload();
-                                }
+                $.ajax({
+                    url : '{{url('/update-order-qty')}}',
+                        method: 'POST',
+                        data:{_token:_token, order_status:order_status ,order_id:order_id ,quantity:quantity, order_product_id:order_product_id},
+                        success:function(data){
+                            alert('Thay đổi tình trạng đơn hàng thành công');
+                            location.reload();
+                        }
                     });
-                
-            }
-    
+                }
         });
     </script>
     <script type="text/javascript">
@@ -595,23 +592,14 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
             // alert(order_code);
             $.ajax({
                     url : '{{url('/update-qty')}}',
-    
                     method: 'POST',
-    
                     data:{_token:_token, order_product_id:order_product_id ,order_qty:order_qty ,order_code:order_code},
                     // dataType:"JSON",
                     success:function(data){
-    
                         alert('Cập nhật số lượng thành công');
-                     
                        location.reload();
-                        
-                  
-                        
-    
                     }
             });
-    
         });
     </script>
 </body>

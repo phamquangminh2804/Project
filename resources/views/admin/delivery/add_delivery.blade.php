@@ -14,27 +14,22 @@
                             }
                             ?>
                         <div class="panel-body">
-
                             <div class="position-center">
                                 <form>
                                     @csrf 
-                             
                                 <div class="form-group">
                                     <label for="exampleInputPassword1">Chọn thành phố</label>
                                       <select name="city" id="city" class="form-control input-sm m-bot15 choose city">
-                                    
                                             <option value="">--Chọn tỉnh thành phố--</option>
                                         @foreach($city as $key => $ci)
                                             <option value="{{$ci->matp}}">{{$ci->name_city}}</option>
-                                        @endforeach
-                                            
+                                        @endforeach    
                                     </select>
                                 </div>
                                 <div class="form-group">
                                     <label for="exampleInputPassword1">Chọn quận huyện</label>
                                       <select name="district" id="district" class="form-control input-sm m-bot15 district choose">
                                             <option value="">--Chọn quận huyện--</option>
-                                           
                                     </select>
                                 </div>
                                   <div class="form-group">
@@ -51,13 +46,9 @@
                                 <button type="button" name="add_delivery" class="btn btn-info add_delivery">Thêm phí vận chuyển</button>
                                 </form>
                             </div>
-
-                            <div id="load_delivery">
-                                
-                            </div>
-                            
+                            <div id="load_delivery"> 
+                            </div> 
                         </div>
                     </section>
-
             </div>
 @endsection

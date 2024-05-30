@@ -87,7 +87,7 @@ Route::get('/show-cart', [CartController::class, 'show_cart'])->name('show-cart'
 Route::get('/delete-to-cart/{rowId}', [CartController::class, 'delete_to_cart'])->name('delete-to-cart');
 Route::get('/del-product/{session_id}', [CartController::class, 'delete_product']);
 Route::get('/del-all-product', [CartController::class, 'delete_all_product']);
-Route::post('/add-cart-ajax', [CartController::class, 'add_cart_ajax']);
+Route::post('/add-cart-ajax', [CartController::class, 'add_cart_ajax'])->name('add-cart-ajax');
 Route::get('/gio-hang', [CartController::class, 'gio_hang']);
 Route::post('/update-cart', [CartController::class, 'update_cart']);
 
@@ -97,24 +97,27 @@ Route::get('/logout-checkout', [CheckoutController::class, 'logout_checkout'])->
 Route::get('/checkout', [CheckoutController::class, 'checkout'])->name('checkout');
 Route::get('/payment', [CheckoutController::class, 'payment'])->name('payment');
 Route::get('/continue-order', [CheckoutController::class, 'continue_order'])->name('continue-order');
+Route::get('/del-fee', [CheckoutController::class, 'del_fee'])->name('del-fee');
 
 Route::post('/save-checkout-customer', [CheckoutController::class, 'save_checkout_customer'])->name('save-checkout-customer');
 Route::post('/add-customer', [CheckoutController::class, 'add_customer'])->name('add-customer');
 Route::post('/login-customer', [CheckoutController::class, 'login_customer'])->name('login-customer');
 Route::post('/order-place', [CheckoutController::class, 'order_place'])->name('order-place');
+Route::post('/calculate-fee', [CheckoutController::class, 'calculate_fee'])->name('calculate-fee');
+
 
 //order
 Route::get('/manage-order', [CheckoutController::class, 'manage_order'])->name('manage-order');
 Route::get('/view-order/{orderId}', [CheckoutController::class, 'view_order'])->name('view-order');
 
 //Coupon
-
 Route::post('/check-coupon', [CartController::class, 'check_coupon']);
 Route::get('/unset-coupon', [CouponController::class, 'unset_coupon']);
 Route::get('/insert-coupon', [CouponController::class, 'insert_coupon']);
 Route::get('/delete-coupon/{coupon_id}', [CouponController::class, 'delete_coupon']);
 Route::get('/list-coupon', [CouponController::class, 'list_coupon']);
 Route::post('/insert-coupon-code', [CouponController::class, 'insert_coupon_code']);
+Route::post('/select-delivery-home', [CheckoutController::class, 'select_delivery_home'])->name('select-delivery-home');
 
 //delivery
 Route::get('/delivery', [DeliveryController::class, 'delivery']);

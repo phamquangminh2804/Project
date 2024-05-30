@@ -26,7 +26,6 @@ class CartController extends Controller
                             'coupon_code' => $coupon->coupon_code,
                             'coupon_condition' => $coupon->coupon_condition,
                             'coupon_number' => $coupon->coupon_number,
-
                         );
                         Session::put('coupon',$cou);
                     }
@@ -134,14 +133,15 @@ class CartController extends Controller
                 foreach($cart as $session => $val){
                     $i++;
 
-                    if($val['session_id']==$key && $qty<$cart[$session]['product_quantity']){
+                    if($val['session_id'] == $key ){ 
+                        // $qty<$cart[$session]['product_quantity']){
 
                         $cart[$session]['product_qty'] = $qty;
                         $message.='<p style="color:blue">'.$i.') Cập nhật số lượng :'.$cart[$session]['product_name'].' thành công</p>';
-
-                    }elseif($val['session_id']==$key && $qty>$cart[$session]['product_quantity']){
-                        $message.='<p style="color:red">'.$i.') Cập nhật số lượng :'.$cart[$session]['product_name'].' thất bại</p>';
                     }
+                    // }elseif($val['session_id']==$key && $qty>$cart[$session]['product_quantity']){
+                    //     $message.='<p style="color:red">'.$i.') Cập nhật số lượng :'.$cart[$session]['product_name'].' thất bại</p>';
+                    // }
 
                 }
 

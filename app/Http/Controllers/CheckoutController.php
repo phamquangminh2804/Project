@@ -250,23 +250,24 @@ class CheckoutController extends Controller
     public function select_delivery_home(Request $request)
         {
             $data = $request->all();
-            if ($data['action']) {
+            if($data['action']){
                 $output = '';
-                if ($data['action'] == "city") {
-                    $select_district = District::where('matp', $data['ma_id'])->orderBy('maqh', 'ASC')->get();
-                    $output .= '<option>-----Chọn quận huyện-----</option>';
-                    foreach ($select_district as $key => $district) {
-                        $output .= '<option value="' . $district->maqh . '">' . $district->name_district . '</option>';
+                if($data['action']=="city"){
+                    $select_district = District::where('matp',$data['ma_id'])->orderby('maqh','ASC')->get();
+                        $output.='<option>---Chọn quận huyện---</option>';
+                    foreach($select_district as $key => $district){
+                        $output.='<option value="'.$district->maqh.'">'.$district->name_district.'</option>';
                     }
-                } else {
-                    $select_wards = Wards::where('maqh', $data['ma_id'])->orderBy('xaid', 'ASC')->get();
-                    $output .= '<option>-----Chọn Xã, Phường, Thị trấn-----</option>';
-                    foreach ($select_wards as $key => $ward) {
-                        $output .= '<option value="' . $ward->xaid . '">' . $ward->name_wards. '</option>';
+    
+                }else{
+    
+                    $select_wards = Wards::where('maqh',$data['ma_id'])->orderby('xaid','ASC')->get();
+                    $output.='<option>---Chọn xã phường---</option>';
+                    foreach($select_wards as $key => $ward){
+                        $output.='<option value="'.$ward->xaid.'">'.$ward->name_wards.'</option>';
                     }
                 }
-                // Trả về kết quả
-                return $output;
+                echo $output;
             }
         }
     public function calculate_fee(Request $request){
@@ -280,8 +281,8 @@ class CheckoutController extends Controller
         }
     }
 
-    public function delete_fee(){
+    public function del_fee(){
         Session::forget('fee');
-        
+        return redirect()->back();
     }
 }
